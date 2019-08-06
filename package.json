@@ -5,7 +5,7 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node server.js",
     "build": "ng build --prod",
     "postinstall": "ng build --aot --prod",
     "test": "ng test",
@@ -36,6 +36,7 @@
     "apollo-link": "^1.2.11",
     "apollo-link-context": "^1.0.18",
     "core-js": "^2.5.4",
+    "express": "^4.17.1",
     "graphql": "^14.3.1",
     "graphql-tag": "^2.10.0",
     "rxjs": "~6.5.1",
