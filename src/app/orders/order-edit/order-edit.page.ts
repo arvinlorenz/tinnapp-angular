@@ -81,7 +81,7 @@ export class OrderEditPage implements OnInit {
             tap((buyer: any) => {
               this.buyerAccount = accountTypes[buyer.accountType];
             })
-          ).subscribe(() => {}, () => this.router.navigateByUrl('/orders'));
+          ).subscribe();
         } else {
           this.isLoading = true;
           this.editMode = false;
