@@ -80,8 +80,8 @@ export class OrderService {
   getOrder(orderId: string) {
     return this.sharedService.orders.pipe(
       take(1),
-      switchMap(orders => {
-         return of(orders.find(o => o.id === orderId));
+      map(orders => {
+         return orders.find(o => o.id === orderId);
       })
     );
   }
