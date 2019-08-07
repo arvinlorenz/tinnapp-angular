@@ -78,71 +78,71 @@ export class OrderService {
       );
   }
 
-  getOrder(orderId: string) {
-    return this.sharedService.orders.pipe(
-      take(1),
-      switchMap(orders => {
-         return of(orders.find(o => o.id === orderId));
-      })
-    );
-  }
   // getOrder(orderId: string) {
-  //   return this.apollo
-  //     .query({
-  //       query: gql`
-  //         query order($id: ID!){
-  //           order(id: $id){
-  //             orderDate
-  //             purchaseDate
-  //             isPaid
-  //             totalPrice
-  //             shippingFee
-  //             buyer{
-  //               id
-  //               name
-  //               email
-  //               accountType
-  //             }
-  //             createdBy{
-  //               name
-  //               email
-  //             }
-  //             products{
-  //                 quantity
-  //                 id
-  //                 product{
-  //                   id
-  //                   name
-  //                   code
-  //                   available
-  //                   expDate
-  //                   price{
-  //                   retail
-  //                   reseller
-  //                   cityDistributor
-  //                   provincialDistributor
-  //                 }
-  //                 }
-  //             }
-  //             updatedAt
-  //             createdAt
-  //           }
-  //         }
-  //       `,
-  //       variables: {
-  //         id: orderId
-  //       },
-  //       fetchPolicy: 'network-only'
+  //   return this.sharedService.orders.pipe(
+  //     take(1),
+  //     switchMap(orders => {
+  //        return of(orders.find(o => o.id === orderId));
   //     })
-  //     // .valueChanges
-  //     .pipe(
-  //       map((order: ApolloQueryResult<any>) => {
-  //         return order.data.order;
-  //       }),
-  //       tap((order) => {
-  //       })
-  //     );
+  //   );
   // }
+  getOrder(orderId: string) {
+    return this.apollo
+      .query({
+        query: gql`
+          query order($id: ID!){
+            order(id: $id){
+              orderDate
+              purchaseDate
+              isPaid
+              totalPrice
+              shippingFee
+              buyer{
+                id
+                name
+                email
+                accountType
+              }
+              createdBy{
+                name
+                email
+              }
+              products{
+                  quantity
+                  id
+                  product{
+                    id
+                    name
+                    code
+                    available
+                    expDate
+                    price{
+                    retail
+                    reseller
+                    cityDistributor
+                    provincialDistributor
+                  }
+                  }
+              }
+              updatedAt
+              createdAt
+            }
+          }
+        `,
+        variables: {
+          id: orderId
+        },
+        fetchPolicy: 'network-only'
+      })
+      // .valueChanges
+      .pipe(
+        map((order: ApolloQueryResult<any>) => {
+          return order.data.order;
+        }),
+        tap((order) => {
+        })
+      );
+  }
 
   deleteOrder(
     orderId: string,
