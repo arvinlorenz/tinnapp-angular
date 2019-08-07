@@ -61,7 +61,6 @@ export class ProductsService {
           return products.data.products;
         }),
         tap((products) => {
-          console.log(products);
           this.sharedService._products.next(products);
         })
       );
@@ -176,15 +175,16 @@ export class ProductsService {
     available: number,
     expDate: Date,
     category: string,
-    price: Price
+    price: Price,
+    oldPrice: Price
   ) {
     let updatedProduct: Product;
     let updatedProducts: Product[];
-    let oldPriceProduct;
     return this.apollo.mutate({
       mutation: gql`
         mutation updateProduct($id: ID!, $data: SaveProductInput!){
           updateProduct(id: $id, data: $data){
+            id
             name
             code
             available
@@ -210,17 +210,18 @@ export class ProductsService {
           available,
           category,
           expDate,
-          price
+          price,
+          oldPrice,
         }
       },
     }).pipe(
       switchMap((productRes: any) => {
+        console.log(productRes);
         updatedProduct = productRes.data.updateProduct;
         return this.sharedService.products;
       }),
       take(1),
       map(products => {
-        oldPriceProduct = products.find(p => p.id === productId).price;
         const updatedProductIndex = products.findIndex(pr => pr.id === productId);
         updatedProducts = [...products];
         updatedProducts[updatedProductIndex] = new Product(
@@ -260,11 +261,10 @@ export class ProductsService {
         for (const order of ordersWithProduct) {
           const orderIndex = orders.findIndex(o => o.id === order.id);
           const newPrice = order.totalPrice
-           - (order.orderedProduct.quantity * oldPriceProduct[accountTypes[order.buyerAccountType]])
+           - (order.orderedProduct.quantity * oldPrice[accountTypes[order.buyerAccountType]])
            + (order.orderedProduct.quantity * updatedProduct.price[accountTypes[order.buyerAccountType]]);
           orders[orderIndex].totalPrice = newPrice;
         }
-
         this.sharedService._orders.next(orders);
       })
 

@@ -22,6 +22,7 @@ export class ProductEditPage implements OnInit {
   productId: string;
   editMode = false;
   form: FormGroup;
+  oldPrice: Price;
   categories: Category[];
   constructor(
     private productService: ProductsService,
@@ -45,6 +46,12 @@ export class ProductEditPage implements OnInit {
         this.productId = paraMap.get('productId');
         this.productService.getProduct(this.productId).subscribe(product => {
           this.product = product;
+          this.oldPrice = {
+            provincialDistributor: product.price.provincialDistributor,
+            cityDistributor: product.price.cityDistributor,
+            reseller: product.price.reseller,
+            retail: product.price.retail
+          };
           this.initializeForm(
             product.name,
             product.code,
@@ -107,7 +114,8 @@ export class ProductEditPage implements OnInit {
         this.form.value.available,
         this.form.value.expDate,
         this.form.value.category,
-        this.form.value.prices
+        this.form.value.prices,
+        this.oldPrice
       ).subscribe(() => {
         this.loadingCtrl.dismiss();
         this.router.navigateByUrl('/products');
