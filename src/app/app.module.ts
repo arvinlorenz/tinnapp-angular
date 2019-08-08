@@ -18,8 +18,8 @@ import { OrderService } from './orders/order.service';
 import { ProductsService } from './products/products.service';
 
 export function createApollo(httpLink: HttpLink) {
-  // https://tinn-app-b54629be85.herokuapp.com/tinnapp-graphql/prod
-  const http = httpLink.create({ uri: 'https://tinn-app-b54629be85.herokuapp.com/tinnapp-graphql/prod'});
+  // https://tinnapp.herokuapp.com/
+  const http = httpLink.create({ uri: 'https://tinnapp.herokuapp.com/'});
 
   const auth = setContext(async (_, { headers }) => {
      const tokenRes = await Plugins.Storage.get({ key: 'authData' });
