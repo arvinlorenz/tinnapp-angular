@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "angular",
+  "appId": "com.arvin.tinnapp",
+  "appName": "tinnapp",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www"

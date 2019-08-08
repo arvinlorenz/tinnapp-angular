@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">TinnApp</string>
+    <string name="title_activity_main">TinnApp</string>
+    <string name="package_name">com.arvin.tinnapp</string>
+    <string name="fileprovider_authority">com.arvin.tinnapp.fileprovider</string>
+    <string name="custom_url_scheme">com.arvin.tinnapp</string>
+</resources>
