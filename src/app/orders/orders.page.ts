@@ -52,17 +52,12 @@ export class OrdersPage implements OnInit, OnDestroy {
   }
 
   onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail>) {
-    this.isLoading = true;
     if (event.detail.value === 'current') {
       this.filter = 'current';
       this.orders = this.allOrders.filter((o: any) => o.isPaid === false);
-      this.isLoading = false;
-
     } else {
       this.filter = 'history';
       this.orders = this.allOrders.filter((o: any) => o.isPaid === true);
-      this.isLoading = false;
-
     }
   }
 }

@@ -4,7 +4,6 @@ import gql from 'graphql-tag';
 import { ApolloQueryResult } from 'apollo-client';
 import { tap, take, map, switchMap } from 'rxjs/operators';
 
-import { of } from 'zen-observable';
 import { SharedService } from '../shared/shared.service';
 
 @Injectable()
@@ -426,7 +425,6 @@ export class OrderService {
         const processedOrders = [...orders];
         processedOrders[processedOrderIndex].purchaseDate = purchasedDate;
         processedOrders[processedOrderIndex].isPaid = true;
-        console.log(processedOrders);
         this.sharedService._orders.next(processedOrders);
       })
 

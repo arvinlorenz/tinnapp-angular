@@ -11,13 +11,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { ArrayValidators } from './array.validators';
 import { LoadingController } from '@ionic/angular';
 import { SharedService } from 'src/app/shared/shared.service';
-
-const accountTypes = {
-  RETAILER: 'retail',
-  RESELLER:   'reseller',
-  CITY_DISTRIBUTOR: 'cityDistributor',
-  PROVINCIAL_DISTRIBUTOR: 'provincialDistributor',
-};
+import { UserService } from 'src/app/users/user.service';
 
 @Component({
   selector: 'app-order-edit',
@@ -41,12 +35,19 @@ export class OrderEditPage implements OnInit {
     private route: ActivatedRoute,
     private orderService: OrderService,
     private authService: AuthService,
-    private productService: ProductsService,
+    private userService: UserService,
     private sharedService: SharedService,
     private fb: FormBuilder,
     private loadingCtrl: LoadingController,
     private router: Router
   ) { }
+
+  accountTypes = {
+    RETAILER: 'retail',
+    RESELLER:   'reseller',
+    CITY_DISTRIBUTOR: 'cityDistributor',
+    PROVINCIAL_DISTRIBUTOR: 'provincialDistributor',
+  };
 
   get thisYear() {
     return (new Date()).getFullYear();
@@ -65,7 +66,7 @@ export class OrderEditPage implements OnInit {
               this.order = order;
               this.isPaid = this.order.isPaid;
               this.totalPrice = this.order.totalPrice;
-              return this.authService.users;
+              return this.userService.users;
             }),
             switchMap((users) => {
               this.customers = users;
@@ -79,13 +80,13 @@ export class OrderEditPage implements OnInit {
               return this.authService.getUser(this.order.buyer.id);
             }),
             tap((buyer: any) => {
-              this.buyerAccount = accountTypes[buyer.accountType];
+              this.buyerAccount = this.accountTypes[buyer.accountType];
             })
           ).subscribe();
         } else {
           this.isLoading = true;
           this.editMode = false;
-          this.authService.users.pipe(
+          this.userService.users.pipe(
             tap(users => {
               this.customers = users;
               this.initializeForm();
@@ -93,7 +94,6 @@ export class OrderEditPage implements OnInit {
           )
           .subscribe();
         }
-        this.initializeForm();
       }
       );
   }
@@ -105,7 +105,7 @@ export class OrderEditPage implements OnInit {
     });
   }
   onChange(event) {
-    this.authService.getUser(event.target.value).subscribe(buyer => this.buyerAccount = accountTypes[buyer.accountType]);
+    this.authService.getUser(event.target.value).subscribe(buyer => this.buyerAccount = this.accountTypes[buyer.accountType]);
   }
   ionViewWillEnter() {
     this.start();
@@ -148,7 +148,6 @@ export class OrderEditPage implements OnInit {
         }), ArrayValidators.minLengthArray(1)
       )
     });
-
     if (this.isPaid) {
       setTimeout(() => this.form.disable());
       console.log(this.form);

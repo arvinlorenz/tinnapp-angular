@@ -5,7 +5,6 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { Price } from '../price.model';
 import { ProductsService } from '../products.service';
 import { LoadingController } from '@ionic/angular';
-import { Observable } from 'apollo-link';
 import { Category } from '../category.model';
 import { SharedService } from 'src/app/shared/shared.service';
 

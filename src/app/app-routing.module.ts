@@ -15,8 +15,7 @@ const routes: Routes = [
   },
   { path: 'products', loadChildren: './products/products.module#ProductsPageModule', canLoad: [AuthGuard] },
   { path: 'auth', loadChildren: './auth/auth.module#AuthPageModule' },
-  { path: 'product-edit', loadChildren: './products/product-edit/product-edit.module#ProductEditPageModule', canLoad: [AuthGuard] },
-  { path: 'product-detail', loadChildren: './products/product-detail/product-detail.module#ProductDetailPageModule', canLoad: [AuthGuard] },
+  { path: 'users', loadChildren: './users/users.module#UsersPageModule', canLoad: [AuthGuard] },
 ];
 
 @NgModule({

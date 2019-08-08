@@ -28,7 +28,7 @@
               <ion-label>Customer</ion-label>
               <ion-select placeholder="Select One" formControlName="customer" (ionChange)="onChange($event)">
                 <div *ngFor="let customerEl of customers; let i = index">
-                    <ion-select-option [value]="customerEl.id">{{ customerEl.name }}</ion-select-option>
+                    <ion-select-option [value]="customerEl.id">{{ customerEl.name }} - {{ accountTypes[customerEl.accountType]}}</ion-select-option>
                 </div>
               </ion-select>
             </ion-item>

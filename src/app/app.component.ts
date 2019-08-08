@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { ProductsService } from './products/products.service';
 import { OrderService } from './orders/order.service';
+import { UserService } from './users/user.service';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +24,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private productService: ProductsService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private userService: UserService
   ) {
     this.initializeApp();
   }
@@ -40,11 +42,14 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!isAuth && this.previousAuthState !== isAuth) {
         this.router.navigateByUrl('/auth');
       }
+      if (isAuth) {
+        this.productService.fetchCategories().subscribe();
+        this.productService.fetchProducts().subscribe();
+        this.orderService.fetchOrders().subscribe();
+        this.userService.fetchUsers().subscribe();
+      }
       this.previousAuthState = isAuth;
     });
-    this.productService.fetchCategories().subscribe();
-    this.productService.fetchProducts().subscribe();
-    this.orderService.fetchOrders().subscribe();
   }
   onLogout() {
     this.authService.logout();

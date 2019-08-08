@@ -22,8 +22,8 @@
     <p>{{ filter == 'current' ? 'No orders found! Please create one first' : 'No order history found.'  }} </p>
     <ion-button *ngIf="filter==='current'"  color="primary" routerLink="/orders/new">Create New Order</ion-button>
   </div>
-  <div text-center>
-      <ion-spinner color="primary" *ngIf="isLoading"></ion-spinner>
+  <div text-center *ngIf="isLoading">
+      <ion-spinner name="bubbles"></ion-spinner>
   </div>
   <app-order-list *ngIf="!isLoading && orders.length > 0" [orders]="orders"></app-order-list>
 </ion-content>

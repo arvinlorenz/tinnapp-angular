@@ -5,6 +5,8 @@ import { User } from './user.model';
 import { map, tap, switchMap } from 'rxjs/operators';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { SharedService } from '../shared/shared.service';
+import { UserService } from '../users/user.service';
 
 export interface AuthResponseData {
   id: string;
@@ -22,7 +24,9 @@ export class AuthService {
 // tslint:disable-next-line: variable-name
   private _user = new BehaviorSubject<any>(null);
   constructor(
-    private apollo: Apollo
+    private apollo: Apollo,
+    private sharedService: SharedService,
+    private userService: UserService
   ) { }
 
   get userIsAuthenticated() {
@@ -155,7 +159,7 @@ export class AuthService {
               userData.user.email,
               userData.token,
               userData.user.accountType);
-          // this._user.next(user);
+          this._user.next(user);
           // this.autoLogout(user.tokenDuration);
           this.storeAuthData(
             userData.user.id,
@@ -178,38 +182,13 @@ export class AuthService {
     });
   }
 
-  get users() {
-    // let users;
-    return this.apollo
-    .watchQuery({
-      query: gql`
-       query users{
-        users{
-          id
-          name
-          email
-          accountType
-        }
-       }
-      `,
-      fetchPolicy: 'network-only'
-    }).valueChanges
-    .pipe(
-      // switchMap((dataRes: any) => {
-      //   users = dataRes.data.users;
-      //   return this.userId;
-      // }),
-      // map(userId => {
-      //  return users.filter(user => user.id !== userId);
-      // })
-      map((dataRes: any) => {
-        return dataRes.data.users;
-      })
-    );
-  }
 
   logout() {
     this._user.next(null);
+    this.sharedService._categories.next(null);
+    this.sharedService._orders.next([]);
+    this.sharedService._products.next([]);
+    this.userService._users.next([]);
     Plugins.Storage.remove({key: 'authData'});
   }
 }

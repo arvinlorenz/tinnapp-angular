@@ -1,4 +1,4 @@
 <ion-item [routerLink]="[product.id]">
   <ion-badge [color]="product.available >= 2 ? 'tertiary' : 'danger'" slot="end">{{product.available}}</ion-badge>
-  <ion-label>{{product.name}}, {{product.code}}</ion-label>
+  <ion-label class="ion-text-capitalize">{{product.name}}</ion-label>
 </ion-item>

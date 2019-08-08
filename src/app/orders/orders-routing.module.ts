@@ -7,10 +7,11 @@ const routes: Routes = [
       path: 'new',
       loadChildren: './order-edit/order-edit.module#OrderEditPageModule',
     },
-    { path: ':orderId', loadChildren: './order-detail/order-detail.module#OrderDetailPageModule' },
-    { path: 'edit/:orderId', loadChildren: './order-edit/order-edit.module#OrderEditPageModule',
-},
-
+    {
+      path: ':orderId', loadChildren: './order-detail/order-detail.module#OrderDetailPageModule' },
+    {
+      path: 'edit/:orderId', loadChildren: './order-edit/order-edit.module#OrderEditPageModule',
+    },
     {
       path: '',
       component: OrdersPage,
