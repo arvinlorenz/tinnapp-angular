@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./auth.page.scss'],
 })
 export class AuthPage implements OnInit {
-  isLogin = false;
+  isLogin = true;
   isLoading = false;
   constructor(
     private authService: AuthService,

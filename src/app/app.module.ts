@@ -19,7 +19,7 @@ import { ProductsService } from './products/products.service';
 
 export function createApollo(httpLink: HttpLink) {
   // https://tinnapp.herokuapp.com/
-  const http = httpLink.create({ uri: 'https://tinnapp.herokuapp.com/'});
+  const http = httpLink.create({ uri: 'http://localhost:4000'});
 
   const auth = setContext(async (_, { headers }) => {
      const tokenRes = await Plugins.Storage.get({ key: 'authData' });

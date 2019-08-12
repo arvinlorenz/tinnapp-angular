@@ -130,4 +130,28 @@ export class UserService {
       })
     );
   }
+
+  deleteUser(id: string) {
+    return this.apollo.mutate({
+      mutation: gql`
+        mutation deleteUser($id: ID!){
+          deleteUser(id: $id){
+            id
+          }
+        }
+      `,
+      variables: {
+        id
+      }
+    }).pipe(
+      switchMap(() => {
+        return this.users;
+      }),
+      take(1),
+      tap(usersRes => {
+        const users = usersRes.filter(user => user.id !== id);
+        this._users.next(users);
+      })
+    )
+  }
 }
