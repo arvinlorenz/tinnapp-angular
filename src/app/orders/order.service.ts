@@ -45,6 +45,7 @@ export class OrderService {
                     id
                     name
                     code
+                    image
                     available
                     expDate
                     price{
@@ -215,6 +216,7 @@ export class OrderService {
               products{
                   quantity
                   id
+                  image
                   product{
                     id
                     name
@@ -335,6 +337,7 @@ export class OrderService {
               products{
                   quantity
                   id
+                  image
                   product{
                     id
                     name

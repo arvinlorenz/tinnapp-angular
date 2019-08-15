@@ -8,6 +8,8 @@ import { Product } from './product.model';
 import { Category } from './category.model';
 import { SharedService } from '../shared/shared.service';
 import { AuthService } from '../auth/auth.service';
+import { AngularFireStorage } from 'angularfire2/storage';
+import { from } from 'rxjs';
 
 const accountTypes = {
   RETAILER: 'retail',
@@ -27,8 +29,10 @@ export class ProductsService {
   constructor(
     private apollo: Apollo,
     private sharedService: SharedService,
-    private authService: AuthService
-   ) { }
+    private authService: AuthService,
+    private afStorage: AngularFireStorage
+   ) {
+   }
 
   fetchProducts() {
     return this.apollo
@@ -39,6 +43,7 @@ export class ProductsService {
             id
             name
             code
+            image
             available
             price{
               retail
@@ -65,91 +70,110 @@ export class ProductsService {
         })
       );
   }
-
   getProduct(id: string) {
-    return this.apollo.watchQuery({
-      query: gql`
-        query Product($id: ID!){
-          product(id: $id){
-            name
-            code
-            available
-            expDate
-            price {
-              retail
-              reseller
-              cityDistributor
-              provincialDistributor
-            }
-            category {
-              id
-            }
-          }
-        }
-      `,
-      variables: {
-        id
-      },
-      fetchPolicy: 'network-only'
-    })
-    .valueChanges
-    .pipe(
-      map((productRes: any) => {
-        return productRes.data.product;
+    return this.sharedService.products.pipe(
+      take(1),
+      map(products => {
+         return products.find(p => p.id === id);
       })
     );
   }
+  // getProduct(id: string) {
+  //   return this.apollo.watchQuery({
+  //     query: gql`
+  //       query Product($id: ID!){
+  //         product(id: $id){
+  //           name
+  //           code
+  //           image
+  //           available
+  //           expDate
+  //           price {
+  //             retail
+  //             reseller
+  //             cityDistributor
+  //             provincialDistributor
+  //           }
+  //           category {
+  //             id
+  //           }
+  //         }
+  //       }
+  //     `,
+  //     variables: {
+  //       id
+  //     },
+  //     fetchPolicy: 'network-only'
+  //   })
+  //   .valueChanges
+  //   .pipe(
+  //     map((productRes: any) => {
+  //       return productRes.data.product;
+  //     })
+  //   );
+  // }
   createProduct(
     name: string,
     code: string,
     available: number,
     expDate: Date,
     category: string,
-    price: Price
+    price: Price,
+    image: File
   ) {
-
     let createdProduct: Product[];
-    return this.apollo
-    .mutate({
-      mutation: gql`
-        mutation createProduct($data: SaveProductInput!)
-        {
-          createProduct(data: $data){
-            id
-            name
-            code
-            available
-            price{
-              retail
-              reseller
-              cityDistributor
-              provincialDistributor
-            }
-            orderedProduct{
-              id
-              quantity
-              order{
-                isPaid
+
+    return from(this.afStorage.upload(image.name, image)).pipe(
+      switchMap(() => {
+        return this.afStorage.ref(image.name).getDownloadURL();
+      }),
+      switchMap(imagePath => {
+        console.log(imagePath);
+        return this.apollo
+        .mutate({
+          mutation: gql`
+            mutation createProduct($data: SaveProductInput!)
+            {
+              createProduct(data: $data){
+                id
+                name
+                code
+                image
+                available
+                price{
+                  retail
+                  reseller
+                  cityDistributor
+                  provincialDistributor
+                }
+                orderedProduct{
+                  id
+                  quantity
+                  order{
+                    isPaid
+                  }
+                }
+                category{
+                  id
+                  name
+                }
               }
             }
-            category{
-              id
-              name
+          `,
+          variables: {
+            data: {
+              name,
+              code,
+              available,
+              expDate,
+              category,
+              price,
+              image: imagePath
             }
           }
-        }
-      `,
-      variables: {
-        data: {
-          name,
-          code,
-          available,
-          expDate,
-          category,
-          price
-        }
-      }
-    }).pipe(
+        });
+      }),
+
       switchMap((productRes: any) => {
         createdProduct = productRes.data.createProduct;
         return this.sharedService.products;
@@ -231,7 +255,8 @@ export class ProductsService {
           updatedProduct.available,
           updatedProduct.expDate,
           updatedProduct.category,
-          updatedProduct.price
+          updatedProduct.price,
+          updatedProduct.image
         );
         return updatedProducts;
       }),

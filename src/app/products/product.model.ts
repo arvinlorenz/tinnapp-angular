@@ -8,6 +8,7 @@ export class Product {
         public available: number,
         public expDate: Date,
         public category: string,
-        public price: Price
+        public price: Price,
+        public image: string
             ) {}
 }

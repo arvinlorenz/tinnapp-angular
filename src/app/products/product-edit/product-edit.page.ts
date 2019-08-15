@@ -23,6 +23,8 @@ export class ProductEditPage implements OnInit {
   form: FormGroup;
   oldPrice: Price;
   categories: Category[];
+  imagePreview: string  | ArrayBuffer;
+
   constructor(
     private productService: ProductsService,
     private sharedService: SharedService,
@@ -51,6 +53,7 @@ export class ProductEditPage implements OnInit {
             reseller: product.price.reseller,
             retail: product.price.retail
           };
+          this.imagePreview = this.product.image;
           this.initializeForm(
             product.name,
             product.code,
@@ -60,14 +63,14 @@ export class ProductEditPage implements OnInit {
             product.price.provincialDistributor,
             product.price.cityDistributor,
             product.price.reseller,
-            product.price.retail);
-        });
+            product.price.retail,
+            product.image);
+        }, () => this.router.navigateByUrl('/products')
+        );
       } else {
         this.editMode = false;
+        this.initializeForm();
       }
-      this.initializeForm();
-
-
     });
   }
 
@@ -80,20 +83,23 @@ export class ProductEditPage implements OnInit {
     provincialDistributor = '',
     cityDistributor = '',
     reseller = '',
-    retail = '') {
+    retail = '',
+    image = '') {
    this.form = this.fb.group({
       name: [name, Validators.required],
       code: [code, Validators.required],
       available: [available, [Validators.required, Validators.min(0)]],
       expDate: [expDate, Validators.required],
       category: [category, Validators.required],
+      image: [image, Validators.required],
       prices: this.fb.group({
         provincialDistributor: [provincialDistributor, Validators.required],
         cityDistributor: [cityDistributor, Validators.required ],
         reseller: [reseller, Validators.required ],
         retail: [retail, Validators.required ],
-      })
+      }),
     });
+   console.log(this.form.value);
 
   }
 
@@ -126,11 +132,23 @@ export class ProductEditPage implements OnInit {
         this.form.value.available,
         this.form.value.expDate,
         this.form.value.category,
-        this.form.value.prices
+        this.form.value.prices,
+        this.form.value.image
       ).subscribe(() => {
         this.loadingCtrl.dismiss();
         this.router.navigateByUrl('/products');
       });
     }
+  }
+
+  onImagePicked(event: Event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({image: file});
+    this.form.get('image').updateValueAndValidity();
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result;
+    };
+    reader.readAsDataURL(file);
   }
 }

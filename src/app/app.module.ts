@@ -5,6 +5,9 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireStorageModule } from 'angularfire2/storage';
+
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,7 +22,8 @@ import { ProductsService } from './products/products.service';
 
 export function createApollo(httpLink: HttpLink) {
   // https://tinnapp.herokuapp.com/
-  const http = httpLink.create({ uri: 'https://tinnapp.herokuapp.com'});
+  // http://localhost:4000
+  const http = httpLink.create({ uri: 'https://tinnapp.herokuapp.com/'});
 
   const auth = setContext(async (_, { headers }) => {
      const tokenRes = await Plugins.Storage.get({ key: 'authData' });
@@ -48,7 +52,14 @@ export function createApollo(httpLink: HttpLink) {
     AppRoutingModule,
     HttpClientModule,
     ApolloModule,
-    HttpLinkModule
+    HttpLinkModule,
+    AngularFireModule.initializeApp({
+      apiKey: 'AIzaSyDvwV4B-Fc2pZdYmdQ__sUcDD-R46ZWXu8',
+      authDomain: 'tinnapp-2eefe.firebaseapp.com',
+      storageBucket: 'tinnapp-2eefe.appspot.com',
+      projectId: 'tinnapp-2eefe'
+    }),
+    AngularFireStorageModule
   ],
   providers: [
     StatusBar,

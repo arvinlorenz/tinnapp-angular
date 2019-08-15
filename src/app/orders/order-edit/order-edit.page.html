@@ -83,6 +83,9 @@
                 <div *ngFor="let productGroup of productsArray.controls; let i = index;">
                   <div [formGroupName]="i">
                     <ion-item>
+                      <ion-thumbnail slot="start">
+                        <ion-img [src]="getProductDetails(productGroup.value.product).image"></ion-img>
+                      </ion-thumbnail>
                       <ion-label position="floating">
                         {{ getProductDetails(productGroup.value.product).name }}
                         <span>&#8369;</span> 
