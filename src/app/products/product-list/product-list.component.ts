@@ -26,12 +26,12 @@ export class ProductListComponent implements OnInit {
     this.router.navigate(['/', 'products', 'tabs', 'items', productId]);
   }
 
-  async onDelete(productId: string, slidingItem: IonItemSliding) {
+  async onDelete(productId: string, productCode: string, slidingItem: IonItemSliding) {
     slidingItem.close();
     const loadingEl = await this.loadingCtrl.create({message: 'Deleting Product...'});
     loadingEl.present();
 
-    this.productService.deleteProduct(productId).subscribe(() => {
+    this.productService.deleteProduct(productId, productCode).subscribe(() => {
       loadingEl.dismiss();
     }, () => {
       loadingEl.dismiss();

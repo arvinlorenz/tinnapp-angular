@@ -123,9 +123,9 @@ export class ProductsService {
   ) {
     let createdProduct: Product[];
 
-    return from(this.afStorage.upload(image.name, image)).pipe(
+    return from(this.afStorage.upload(code, image)).pipe(
       switchMap(() => {
-        return this.afStorage.ref(image.name).getDownloadURL();
+        return this.afStorage.ref(code).getDownloadURL();
       }),
       switchMap(imagePath => {
         console.log(imagePath);
@@ -296,24 +296,29 @@ export class ProductsService {
     );
   }
   deleteProduct(
-    id: string
+    id: string,
+    code: string
   ) {
     let productPrice;
     let categoryId;
-    return this.apollo
-    .mutate({
-      mutation: gql`
-        mutation deleteProduct($id: ID!)
-        {
-          deleteProduct(id: $id){
+
+    return this.afStorage.ref(code).delete().pipe(
+      switchMap(() => {
+        return this.apollo
+        .mutate({
+          mutation: gql`
+            mutation deleteProduct($id: ID!)
+            {
+              deleteProduct(id: $id){
+                id
+              }
+            }
+          `,
+          variables: {
             id
           }
-        }
-      `,
-      variables: {
-        id
-      }
-    }).pipe(
+        });
+      }),
       switchMap(() => {
         return this.sharedService.products;
       }),
