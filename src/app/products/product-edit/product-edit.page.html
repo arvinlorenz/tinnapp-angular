@@ -4,8 +4,7 @@
       <ion-back-button [defaultHref]="'/products'"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="primary">
-        <!-- [disabled]="!form?.valid" -->
-      <ion-button (click)="onSaveProduct()">
+      <ion-button (click)="onSaveProduct()" [disabled]="!form?.valid">
         <ion-icon name="checkmark" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -16,7 +15,7 @@
 <ion-content>
   <form [formGroup]="form">
     <ion-grid>
-      <ion-row>
+      <!-- <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <ion-item>
             <ion-button type="button" mat-stroked-button (click)="filePicker.click()">Pick Image</ion-button>
@@ -31,6 +30,14 @@
               <img [src]="imagePreview" [alt]="form.value.title">
             </div>
           </ion-item>
+        </ion-col>
+      </ion-row> -->
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <app-image-picker
+            (imagePick)="onImagePicked($event)"
+            [showPreview]="form.get('image').value">
+          </app-image-picker>
         </ion-col>
       </ion-row>
       <ion-row>

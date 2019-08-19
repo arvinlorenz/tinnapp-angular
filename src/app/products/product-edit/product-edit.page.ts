@@ -8,6 +8,27 @@ import { LoadingController } from '@ionic/angular';
 import { Category } from '../category.model';
 import { SharedService } from 'src/app/shared/shared.service';
 
+function base64toBlob(base64Data, contentType) {
+  contentType = contentType || '';
+  const sliceSize = 1024;
+  const byteCharacters = window.atob(base64Data);
+  const bytesLength = byteCharacters.length;
+  const slicesCount = Math.ceil(bytesLength / sliceSize);
+  const byteArrays = new Array(slicesCount);
+
+  for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+    const begin = sliceIndex * sliceSize;
+    const end = Math.min(begin + sliceSize, bytesLength);
+
+    const bytes = new Array(end - begin);
+    for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
+      bytes[i] = byteCharacters[offset].charCodeAt(0);
+    }
+    byteArrays[sliceIndex] = new Uint8Array(bytes);
+  }
+  return new Blob(byteArrays, { type: contentType });
+}
+
 @Component({
   selector: 'app-product-edit',
   templateUrl: './product-edit.page.html',
@@ -99,8 +120,6 @@ export class ProductEditPage implements OnInit {
         retail: [retail, Validators.required ],
       }),
     });
-   console.log(this.form.value);
-
   }
 
   async onSaveProduct() {
@@ -141,14 +160,31 @@ export class ProductEditPage implements OnInit {
     }
   }
 
-  onImagePicked(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    this.form.patchValue({image: file});
-    this.form.get('image').updateValueAndValidity();
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview = reader.result;
-    };
-    reader.readAsDataURL(file);
+  // onImagePicked(event: Event) {
+  //   const file = (event.target as HTMLInputElement).files[0];
+  //   this.form.patchValue({image: file});
+  //   this.form.get('image').updateValueAndValidity();
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     this.imagePreview = reader.result;
+  //   };
+  //   reader.readAsDataURL(file);
+  // }
+
+  onImagePicked(imageData: string | File) {
+    let imageFile;
+    if (typeof imageData === 'string') {
+      try {
+        imageFile = base64toBlob(
+          imageData,
+          'image/jpeg');
+      } catch (error) {
+        return;
+      }
+    } else {
+      imageFile = imageData;
+    }
+    this.form.patchValue({image: imageFile});
+    console.log(this.form.value.image);
   }
 }

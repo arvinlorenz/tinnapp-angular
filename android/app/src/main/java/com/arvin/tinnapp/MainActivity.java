@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.arvin.tinnapp;
 
 import android.os.Bundle;
 
