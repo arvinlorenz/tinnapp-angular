@@ -192,6 +192,13 @@ export class OrderService {
     products: { product: string, quantity: number, available: number, price: any }[],
     orderDate: string,
     shippingFee: number) {
+      console.log({
+        orderDate,
+        buyerAccount,
+        buyer: customer,
+        shippingFee,
+        products
+      });
       let createdOrder;
       return this.apollo.mutate({
         mutation: gql`
@@ -216,9 +223,9 @@ export class OrderService {
               products{
                   quantity
                   id
-                  image
                   product{
                     id
+                    image
                     name
                     code
                     available

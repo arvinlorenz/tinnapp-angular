@@ -128,7 +128,6 @@ export class ProductsService {
         return this.afStorage.ref(code).getDownloadURL();
       }),
       switchMap(imagePath => {
-        console.log(imagePath);
         return this.apollo
         .mutate({
           mutation: gql`
