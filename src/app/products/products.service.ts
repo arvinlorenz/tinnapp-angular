@@ -447,7 +447,12 @@ export class ProductsService {
       mutation: gql`
          mutation updateCategory($id: ID!, $data: SaveCategoryInput!){
           updateCategory(id: $id, data: $data){
-           id
+            id
+            name
+            description
+            products{
+              id
+            }
           }
         }
       `,
@@ -469,6 +474,7 @@ export class ProductsService {
         const updatedCategoryIndex = categories.findIndex(ct => ct.id === categoryId);
         updatedCategories = [...categories];
         updatedCategories[updatedCategoryIndex] = {
+          ...updatedCategories[updatedCategoryIndex],
           name: updatedCategory.name,
           description: updatedCategory.description
         };
