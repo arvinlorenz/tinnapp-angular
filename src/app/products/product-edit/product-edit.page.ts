@@ -112,7 +112,7 @@ export class ProductEditPage implements OnInit {
       available: [available, [Validators.required, Validators.min(0)]],
       expDate: [expDate, Validators.required],
       category: [category, Validators.required],
-      image: [image, Validators.required],
+      image: [image],
       prices: this.fb.group({
         provincialDistributor: [provincialDistributor, Validators.required],
         cityDistributor: [cityDistributor, Validators.required ],
