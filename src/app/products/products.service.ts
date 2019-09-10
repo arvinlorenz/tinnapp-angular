@@ -119,76 +119,71 @@ export class ProductsService {
     expDate: Date,
     category: string,
     price: Price,
-    image: File
   ) {
     let createdProduct: Product[];
-
-    return from(this.afStorage.upload(code, image)).pipe(
-      switchMap(() => {
-        return this.afStorage.ref(code).getDownloadURL();
-      }),
-      switchMap(imagePath => {
-        return this.apollo
-        .mutate({
-          mutation: gql`
-            mutation createProduct($data: SaveProductInput!)
-            {
-              createProduct(data: $data){
+    // return from(this.afStorage.upload(code, image))
+    // switchMap(() => {
+      //   return this.afStorage.ref(code).getDownloadURL();
+      // }),
+    return this.apollo
+      .mutate({
+        mutation: gql`
+          mutation createProduct($data: SaveProductInput!)
+          {
+            createProduct(data: $data){
+              id
+              name
+              code
+              image
+              available
+              price{
+                retail
+                reseller
+                cityDistributor
+                provincialDistributor
+              }
+              orderedProduct{
                 id
-                name
-                code
-                image
-                available
-                price{
-                  retail
-                  reseller
-                  cityDistributor
-                  provincialDistributor
-                }
-                orderedProduct{
-                  id
-                  quantity
-                  order{
-                    isPaid
-                  }
-                }
-                category{
-                  id
-                  name
+                quantity
+                order{
+                  isPaid
                 }
               }
-            }
-          `,
-          variables: {
-            data: {
-              name,
-              code,
-              available,
-              expDate,
-              category,
-              price,
-              image: imagePath
+              category{
+                id
+                name
+              }
             }
           }
-        });
-      }),
-
-      switchMap((productRes: any) => {
-        createdProduct = productRes.data.createProduct;
-        return this.sharedService.products;
-      }),
-      take(1),
-      switchMap(products => {
-        this.sharedService._products.next(products.concat(createdProduct));
-        return this.sharedService.categories;
-      }),
-      take(1),
-      tap((categories: any) => {
-        const categoryIndex = categories.findIndex(ct => ct.id === category);
-        categories[categoryIndex].products = categories[categoryIndex].products.concat(createdProduct);
-        this.sharedService._categories.next(categories);
+        `,
+        variables: {
+          data: {
+            name,
+            code,
+            available,
+            expDate,
+            category,
+            price,
+          }
+        }
       })
-    );
+      .pipe(
+        switchMap((productRes: any) => {
+          createdProduct = productRes.data.createProduct;
+          return this.sharedService.products;
+        }),
+        take(1),
+        switchMap(products => {
+          this.sharedService._products.next(products.concat(createdProduct));
+          return this.sharedService.categories;
+        }),
+        take(1),
+        tap((categories: any) => {
+          const categoryIndex = categories.findIndex(ct => ct.id === category);
+          categories[categoryIndex].products = categories[categoryIndex].products.concat(createdProduct);
+          this.sharedService._categories.next(categories);
+        })
+      );
   }
 
   editProduct(
@@ -301,23 +296,21 @@ export class ProductsService {
     let productPrice;
     let categoryId;
 
-    return this.afStorage.ref(code).delete().pipe(
-      switchMap(() => {
-        return this.apollo
-        .mutate({
-          mutation: gql`
-            mutation deleteProduct($id: ID!)
-            {
-              deleteProduct(id: $id){
-                id
-              }
+    return this.apollo
+      .mutate({
+        mutation: gql`
+          mutation deleteProduct($id: ID!)
+          {
+            deleteProduct(id: $id){
+              id
             }
-          `,
-          variables: {
-            id
           }
-        });
-      }),
+        `,
+        variables: {
+          id
+        }
+      }).pipe(
+
       switchMap(() => {
         return this.sharedService.products;
       }),

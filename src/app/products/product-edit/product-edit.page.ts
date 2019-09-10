@@ -74,7 +74,7 @@ export class ProductEditPage implements OnInit {
             reseller: product.price.reseller,
             retail: product.price.retail
           };
-          this.imagePreview = this.product.image;
+          // this.imagePreview = this.product.image;
           this.initializeForm(
             product.name,
             product.code,
@@ -84,8 +84,7 @@ export class ProductEditPage implements OnInit {
             product.price.provincialDistributor,
             product.price.cityDistributor,
             product.price.reseller,
-            product.price.retail,
-            product.image);
+            product.price.retail);
         }, () => this.router.navigateByUrl('/products')
         );
       } else {
@@ -105,14 +104,13 @@ export class ProductEditPage implements OnInit {
     cityDistributor = '',
     reseller = '',
     retail = '',
-    image = '') {
+    ) {
    this.form = this.fb.group({
       name: [name, Validators.required],
       code: [code, Validators.required],
       available: [available, [Validators.required, Validators.min(0)]],
       expDate: [expDate, Validators.required],
       category: [category, Validators.required],
-      image: [image],
       prices: this.fb.group({
         provincialDistributor: [provincialDistributor, Validators.required],
         cityDistributor: [cityDistributor, Validators.required ],
@@ -152,7 +150,6 @@ export class ProductEditPage implements OnInit {
         this.form.value.expDate,
         this.form.value.category,
         this.form.value.prices,
-        this.form.value.image
       ).subscribe(() => {
         this.loadingCtrl.dismiss();
         this.router.navigateByUrl('/products');
