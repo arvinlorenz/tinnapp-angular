@@ -75,6 +75,7 @@ export class ProductEditPage implements OnInit {
             retail: product.price.retail
           };
           // this.imagePreview = this.product.image;
+          console.log(this.product);
           this.initializeForm(
             product.name,
             product.code,

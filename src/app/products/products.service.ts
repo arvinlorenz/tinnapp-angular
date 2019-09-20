@@ -45,6 +45,7 @@ export class ProductsService {
             code
             image
             available
+            expDate
             price{
               retail
               reseller
