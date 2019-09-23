@@ -38,8 +38,7 @@ export class ProductsPage implements OnInit {
     if (event.target.value.trim() !== '') {
       this.productsRep = this.products.filter((i) => {
         return i.name.toLowerCase().includes(event.target.value.toLowerCase().trim())
-        || i.category.name.toLowerCase().includes(event.target.value.toLowerCase().trim())
-        || i.available.toLowerCase().includes(event.target.value.toLowerCase().trim());
+        || i.category.name.toLowerCase().includes(event.target.value.toLowerCase().trim());
       });
     }
   }
