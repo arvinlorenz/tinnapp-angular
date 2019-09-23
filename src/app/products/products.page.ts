@@ -24,12 +24,15 @@ export class ProductsPage implements OnInit {
     this.sharedService.products.subscribe((products: any) => {
       this.isLoading = false;
       this.products = products;
+      this.productsRep = this.products;
     });
   }
   ionViewWillEnter() {
     this.sharedService.products.subscribe((products: any) => {
       this.isLoading = false;
       this.products = products;
+      this.productsRep = this.products;
+
     });
   }
 
@@ -38,7 +41,8 @@ export class ProductsPage implements OnInit {
     if (event.target.value.trim() !== '') {
       this.productsRep = this.products.filter((i) => {
         return i.name.toLowerCase().includes(event.target.value.toLowerCase().trim())
-        || i.category.name.toLowerCase().includes(event.target.value.toLowerCase().trim());
+        || i.category.name.toLowerCase().includes(event.target.value.toLowerCase().trim())
+        || i.available.toString().toLowerCase().includes(event.target.value.toLowerCase().trim());
       });
     }
   }

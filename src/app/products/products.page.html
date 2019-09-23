@@ -16,12 +16,12 @@
   <ion-searchbar #searchBar (ionInput)="getItems($event)" *ngIf="products.length > 0"></ion-searchbar>
 
     <div text-center>
-      <div *ngIf="!isLoading && products?.length <= 0">
+      <div *ngIf="!isLoading && productsRep?.length <= 0">
         <p>No products found! Please create one first</p>
         <ion-button  color="primary" routerLink="/products/tabs/items/new">Create New Product</ion-button>
       </div>
       
       <ion-spinner color="primary" *ngIf="isLoading"></ion-spinner>
     </div>
-  <app-product-list *ngIf="!isLoading && products?.length > 0" [products]="products"></app-product-list>
+  <app-product-list *ngIf="!isLoading && productsRep?.length > 0" [products]="productsRep"></app-product-list>
 </ion-content>
