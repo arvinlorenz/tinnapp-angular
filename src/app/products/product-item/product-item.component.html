@@ -1,10 +1,10 @@
 <ion-item [routerLink]="[product.id]">
-  <ion-thumbnail slot="start">
+  <!-- <ion-thumbnail slot="start">
     <ion-img [src]="product.image"></ion-img>
-  </ion-thumbnail>
+  </ion-thumbnail> -->
   <ion-badge [color]="product.available >= 2 ? 'tertiary' : 'danger'" slot="end">{{product.available}}</ion-badge>
   <ion-label>
     <h2 class="ion-text-capitalize">{{ product.name }}</h2>
-    <p>{{ product.code }}</p>
+    <p>{{ product.category.name }}</p>
   </ion-label>
 </ion-item>
