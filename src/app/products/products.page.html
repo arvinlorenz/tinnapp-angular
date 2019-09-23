@@ -13,7 +13,8 @@
 </ion-header>
 
 <ion-content>
-    
+  <ion-searchbar #searchBar (ionInput)="getItems($event)" *ngIf="products.length > 0"></ion-searchbar>
+
     <div text-center>
       <div *ngIf="!isLoading && products?.length <= 0">
         <p>No products found! Please create one first</p>

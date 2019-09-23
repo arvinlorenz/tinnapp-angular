@@ -11,7 +11,8 @@ import { SharedService } from '../shared/shared.service';
   styleUrls: ['./products.page.scss'],
 })
 export class ProductsPage implements OnInit {
-  products: Product[];
+  products;
+  productsRep;
   isLoading = true;
   constructor(
     private sharedService: SharedService,
@@ -30,5 +31,16 @@ export class ProductsPage implements OnInit {
       this.isLoading = false;
       this.products = products;
     });
+  }
+
+  getItems(event) {
+    this.productsRep = this.products;
+    if (event.target.value.trim() !== '') {
+      this.productsRep = this.products.filter((i) => {
+        return i.name.toLowerCase().includes(event.target.value.toLowerCase().trim())
+        || i.category.name.toLowerCase().includes(event.target.value.toLowerCase().trim())
+        || i.available.toLowerCase().includes(event.target.value.toLowerCase().trim());
+      });
+    }
   }
 }
