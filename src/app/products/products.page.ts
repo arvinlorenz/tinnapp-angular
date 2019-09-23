@@ -27,14 +27,7 @@ export class ProductsPage implements OnInit {
       this.productsRep = this.products;
     });
   }
-  ionViewWillEnter() {
-    this.sharedService.products.subscribe((products: any) => {
-      this.isLoading = false;
-      this.products = products;
-      this.productsRep = this.products;
 
-    });
-  }
 
   getItems(event) {
     this.productsRep = this.products;
