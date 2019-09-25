@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+     <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="'/orders'"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-button (click)="screenShot()">
+        <ion-icon name="camera" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Receipt</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col size-md="6" offset-md="3">
+      <ion-item lines="none">
+        <ion-label>
+          <h2 class="ion-text-capitalize" color="primary">OID:</h2>
+        </ion-label>
+        <ion-text class="ion-text-capitalize ion-text-right">
+          <p>{{ order.id }}</p>
+        </ion-text>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>
+          <h2 class="ion-text-capitalize" color="primary">Customer:</h2>
+          <p class="ion-text-capitalize">{{ accountType }}</p>
+        </ion-label>
+        <ion-text class="ion-text-capitalize ion-text-right">
+          <p>{{ order.buyer.name }}</p>
+        </ion-text>
+      </ion-item>
+      <ion-list>
+        <ion-list-header>
+          <ion-label>Products:</ion-label>
+        </ion-list-header>
+          <ion-item *ngFor="let p of orderedProducts">
+            <ion-label>
+              <h2 class="ion-text-capitalize">{{ p.product.name }}</h2>
+              <p>Price: {{ p.product.price[accountType] }}</p>
+              <p>Quantity: {{ p.quantity }}</p>
+            </ion-label>
+            <ion-text class="ion-text-right">
+              <p><span>&#8369;</span>{{ p.product.price[accountType] *  p.quantity}}</p>
+            </ion-text>
+          </ion-item>
+            
+      </ion-list>
+      <ion-item>
+        <ion-label>
+          <h2 class="ion-text-capitalize" color="primary">TOTAL:</h2>
+        </ion-label>
+        <ion-text class="ion-text-right">
+          <p><span>&#8369;</span>{{ order.totalPrice }}</p>
+        </ion-text>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-content>

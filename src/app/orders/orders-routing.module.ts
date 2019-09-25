@@ -13,9 +13,13 @@ const routes: Routes = [
       path: 'edit/:orderId', loadChildren: './order-edit/order-edit.module#OrderEditPageModule',
     },
     {
+      path: 'receipt/:orderId', loadChildren: './order-receipt/order-receipt.module#OrderReceiptPageModule',
+    },
+    {
       path: '',
       component: OrdersPage,
     },
+  { path: 'order-receipt', loadChildren: './order-receipt/order-receipt.module#OrderReceiptPageModule' },
   ];
 
 @NgModule({
