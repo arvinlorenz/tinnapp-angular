@@ -24,7 +24,7 @@ export class ProductsPage implements OnInit {
     this.sharedService.products.subscribe((products: any) => {
       this.isLoading = false;
       this.products = products;
-      this.productsRep = this.products;
+      this.productsRep = this.products.sort((a, b) => (new Date(a.expDate).getTime() > new Date(b.expDate).getTime()) ? 1 : -1);
     });
   }
 

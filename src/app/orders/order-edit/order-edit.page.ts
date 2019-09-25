@@ -31,6 +31,7 @@ export class OrderEditPage implements OnInit {
   totalPrice: number;
   buyerAccount = '';
   isPaid;
+  productsRep;
   constructor(
     private route: ActivatedRoute,
     private orderService: OrderService,
@@ -101,6 +102,7 @@ export class OrderEditPage implements OnInit {
     this.start();
     this.sharedService.products.subscribe(products => {
       this.productOptions = products;
+      this.productsRep = this.productOptions.map(p => p.id);
       this.isLoading = false;
     });
   }
@@ -111,8 +113,8 @@ export class OrderEditPage implements OnInit {
     this.start();
     this.sharedService.products.subscribe(products => {
       this.productOptions = products;
+      this.productsRep = this.productOptions.map(p => p.id);
       this.isLoading = false;
-      console.log('productOptions', this.productOptions);
     });
   }
 
@@ -237,5 +239,16 @@ export class OrderEditPage implements OnInit {
     }
 
   }
-
+  getItems(event) {
+    this.productsRep = this.productOptions.map(p => p.id);
+    if (event.target.value.trim() !== '') {
+      this.productsRep = this.productOptions.filter((i) => {
+        return i.name.toLowerCase().includes(event.target.value.toLowerCase().trim())
+        || i.category.name.toLowerCase().includes(event.target.value.toLowerCase().trim());
+      }).map(p => p.id);
+    }
+  }
+  existInProductRep(data) {
+    return this.productsRep.some(p => p === data.id);
+  }
 }

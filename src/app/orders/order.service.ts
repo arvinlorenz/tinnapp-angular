@@ -225,7 +225,6 @@ export class OrderService {
                   id
                   product{
                     id
-                    image
                     name
                     code
                     available
@@ -321,6 +320,16 @@ export class OrderService {
        });
       }
     }
+    console.log(
+      orderId,
+      orderDate,
+      customer,
+      shippingFee,
+      products,
+      oldProductData,
+      oldTotalPrice,
+      oldShippingFee,
+      buyerAccount);
     return this.apollo.mutate({
       mutation: gql`
         mutation updateOrder($id: ID!, $data: UpdateOrderInput!){
@@ -344,7 +353,6 @@ export class OrderService {
               products{
                   quantity
                   id
-                  image
                   product{
                     id
                     name
@@ -356,8 +364,8 @@ export class OrderService {
                       reseller
                       cityDistributor
                       provincialDistributor
-                   }
-                   category{
+                    }
+                    category{
                       id
                       name
                     }

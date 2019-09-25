@@ -5,6 +5,7 @@
   <ion-badge [color]="product.available >= 2 ? 'tertiary' : 'danger'" slot="end">{{product.available}}</ion-badge>
   <ion-label>
     <h2 class="ion-text-capitalize">{{ product.name }}</h2>
-    <p>{{ product.category.name }}</p>
+    <h3>{{ product.category.name }}</h3>
+    <p>EXP: {{ product.expDate | date }}</p>
   </ion-label>
 </ion-item>

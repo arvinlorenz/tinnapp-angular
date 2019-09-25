@@ -80,16 +80,17 @@
                 <ion-list-header>
                   <ion-label>Products</ion-label>
                 </ion-list-header>
+                <ion-searchbar #searchBar (ionInput)="getItems($event)"></ion-searchbar>
+
                 <div *ngFor="let productGroup of productsArray.controls; let i = index;">
                   <div [formGroupName]="i">
-                    <ion-item>
-                      <ion-thumbnail slot="start">
+                    <ion-item *ngIf="existInProductRep(getProductDetails(productGroup.value.product))">
+                      <!-- <ion-thumbnail slot="start">
                         <ion-img [src]="getProductDetails(productGroup.value.product).image"></ion-img>
-                      </ion-thumbnail>
+                      </ion-thumbnail> -->
                       <ion-label position="floating">
-                        {{ getProductDetails(productGroup.value.product).name }}
-                        <span>&#8369;</span> 
-                        {{getProductDetails(productGroup.value.product).price[buyerAccount] }}
+                        <h2>{{ getProductDetails(productGroup.value.product).name }} - <span>&#8369;</span> {{getProductDetails(productGroup.value.product).price[buyerAccount] }}</h2>
+                        <p>{{ getProductDetails(productGroup.value.product).category.name }}</p>
                       </ion-label>
                       <ion-input type="number" formControlName="quantity" [placeholder]="getQuantity(productGroup.value.product) + ' items remaining'"></ion-input>
                     </ion-item>
