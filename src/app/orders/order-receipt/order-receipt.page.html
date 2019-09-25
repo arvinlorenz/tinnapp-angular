@@ -51,6 +51,7 @@
       <ion-item>
         <ion-label>
           <h2 class="ion-text-capitalize" color="primary">TOTAL:</h2>
+          <p class="ion-text-capitalize">+ Shipping Fee  (<span>&#8369;</span>{{ order.shippingFee || '0' }})</p>
         </ion-label>
         <ion-text class="ion-text-right">
           <p><span>&#8369;</span>{{ order.totalPrice }}</p>
