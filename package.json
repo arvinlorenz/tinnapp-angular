@@ -41,7 +41,7 @@
     "apollo-link-context": "^1.0.18",
     "com.darktalker.cordova.screenshot": "0.1.6",
     "core-js": "^2.5.4",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "firebase": "^6.3.5",
     "graphql": "^14.3.1",
     "graphql-tag": "^2.10.0",
